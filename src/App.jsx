@@ -7,24 +7,31 @@ import RightBar from "./components/rightbar/RightBar";
 import LeftBar from "./components/leftbar/LeftBar";
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
-import "./app.scss";
+import "./style.scss";
 import {
   createBrowserRouter,
   Outlet,
   RouterProvider,
   Navigate,
 } from "react-router-dom";
+import { useContext } from "react";
+import { DarkModeContext } from "./context/darkModeContext";
 
 function App() {
   const currentuser = true;
 
+  const { darkMode } = useContext(DarkModeContext);
+
+
   const Layout = () => {
     return (
-      <div className="main">
+      <div className={`theme-${darkMode ? 'dark' : 'light'}`}>
         <NavBar />
         <div style={{ display: "flex" }}>
           <LeftBar />
-          <Outlet />
+          <div style={{ flex: 6 }}>
+            <Outlet />
+          </div>
           <RightBar />
         </div>
       </div>
