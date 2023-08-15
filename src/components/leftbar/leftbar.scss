@@ -27,6 +27,10 @@
         display: flex;
         flex-direction: column;
         gap: 20px;
+
+        span{
+          font-size: 12px;
+        }
         .user {
           display: flex;
           align-items: center;
@@ -35,6 +39,7 @@
 
           span {
             color: themed("textColor");
+            font-size: 14px;
           }
         }
         .item {
@@ -45,6 +50,7 @@
 
           span {
             color: themed("textColor");
+            font-size: 14px;
           }
         }
       }
