@@ -7,14 +7,20 @@ import RightBar from "./components/rightbar/RightBar";
 import LeftBar from "./components/leftbar/LeftBar";
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
-import { createBrowserRouter, Outlet, RouterProvider, Navigate } from "react-router-dom";
+import "./app.scss";
+import {
+  createBrowserRouter,
+  Outlet,
+  RouterProvider,
+  Navigate,
+} from "react-router-dom";
 
 function App() {
   const currentuser = true;
 
   const Layout = () => {
     return (
-      <div>
+      <div className="main">
         <NavBar />
         <div style={{ display: "flex" }}>
           <LeftBar />
