@@ -38,6 +38,11 @@
           width: 500px;
           background: transparent;
           color: themed("textColor");
+
+          @include mobile{
+            display: none;
+          }
+
         }
       }
     }
@@ -45,6 +50,9 @@
       display: flex;
       align-items: center;
       gap: 30px;
+      @include mobile{
+        display: none;
+      }
 
       .user {
         display: flex;
