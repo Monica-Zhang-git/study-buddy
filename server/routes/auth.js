@@ -1,5 +1,5 @@
 import express from "express";
-import { User } from "../db/user-schema.js"; // Use the correct relative path here
+import { User } from "../db/user-schema.js"; 
 import bcrypt from "bcrypt";
 const router = express.Router();
 
