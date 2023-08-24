@@ -9,6 +9,7 @@ import morgan from "morgan";
 import userRoute from "./routes/users.js";
 import authRoute from "./routes/auth.js";
 import connectRoute from "./routes/connection.js";
+import postRoute from "./routes/posts.js";
 
 //Setup Express
 const app = express();
@@ -23,6 +24,8 @@ app.use(morgan("common"));
 app.use("/api/users", userRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/connection", connectRoute);
+app.use("/api/post", postRoute);
+
 
 // Start the server running. Once the server is running, the given function will be called, which will
 // log a simple message to the server console. Any console.log() statements in your node.js code
