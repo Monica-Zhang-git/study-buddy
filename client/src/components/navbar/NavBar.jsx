@@ -45,7 +45,7 @@ function NavBar(props) {
         <MessageOutlinedIcon />
         <NotificationsOutlinedIcon />
         <div className="user">
-          <img src={photo} />
+          <img src={currentUser.profilePic} alt="avatar" />
           <span>{currentUser.name}</span>
         </div>
       </div>

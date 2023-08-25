@@ -8,23 +8,23 @@ function Stories(props) {
   const stories = [
     {
       id: 1,
-      name: "John Doe",
-      img: "https://images.pexels.com/photos/13916254/pexels-photo-13916254.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
+      name: "Monica",
+      img: "https://images.pexels.com/photos/5342978/pexels-photo-5342978.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     },
     {
       id: 2,
-      name: "John Doe",
-      img: "https://images.pexels.com/photos/13916254/pexels-photo-13916254.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
+      name: "Renee",
+      img: "https://images.pexels.com/photos/5342976/pexels-photo-5342976.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     },
     {
       id: 3,
-      name: "John Doe",
-      img: "https://images.pexels.com/photos/13916254/pexels-photo-13916254.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
+      name: "Tyne",
+      img: "https://images.pexels.com/photos/7250790/pexels-photo-7250790.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     },
     {
       id: 4,
-      name: "John Doe",
-      img: "https://images.pexels.com/photos/13916254/pexels-photo-13916254.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
+      name: "Andrew",
+      img: "https://images.pexels.com/photos/5342977/pexels-photo-5342977.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     },
   ];
 

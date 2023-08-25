@@ -11,14 +11,14 @@ function Profile(props) {
       <div className="images">
         <img
           src={
-            "https://images.pexels.com/photos/13440765/pexels-photo-13440765.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+            "https://images.pexels.com/photos/5169050/pexels-photo-5169050.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
           }
           alt=""
           className="cover"
         />
         <img
           src={
-            "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            "https://images.pexels.com/photos/16943679/pexels-photo-16943679/free-photo-of-ranti-marsyanda-chandri-anggara.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
           }
           alt=""
           className="profilePic"

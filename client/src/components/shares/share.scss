@@ -1,0 +1,90 @@
+@import "../../style.scss";
+
+.share {
+  @include themify($themes) {
+    -webkit-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+    -moz-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+    box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+    border-radius: 20px;
+    background-color: themed("bg");
+    color: themed("textColor");
+    margin-bottom: 20px;
+
+    .container {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+
+      .userInfo {
+        align-items: center;
+        display: flex;
+        gap: 20px;
+
+        img {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+      }
+
+      .content {
+        input {
+          width: 60%;
+          height: 100%;
+          border: none;
+          outline: none;
+          padding: 20px 10px;
+          background-color: transparent;
+          color: themed("textColor");
+        }
+      }
+
+      hr {
+        margin: 20px 0;
+        height: 0.5px;
+        background-color: themed("border");
+        border: none;
+      }
+      .attachment {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .left {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          .item {
+            padding: 5px;
+
+            input {
+              display: none;
+            }
+
+            label {
+              display: flex;
+              align-items: center;
+              color: #8095ff;
+              gap: 10px;
+              cursor: pointer;
+            }
+
+            span {
+              color: themed("textColorSoft");
+            }
+          }
+        }
+        .right {
+          button {
+            border: none;
+            border-radius: 4px;
+            padding: 10px 15px;
+            color: white;
+            background-color: #8095ff;
+          }
+        }
+      }
+    }
+  }
+}

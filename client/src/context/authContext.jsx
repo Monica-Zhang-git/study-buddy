@@ -1,5 +1,4 @@
 import { createContext, useEffect, useState } from "react";
-import photo from "../assets/register-background-pic.jpg";
 
 
 export const AuthContext = createContext();
@@ -13,7 +12,8 @@ export const AuthContextProvider = ({ children }) => {
     setCurrentUser({
       id: 1,
       name: "Jenny chen",
-      profilePic: photo,
+      profilePic:
+        "https://images.pexels.com/photos/16943679/pexels-photo-16943679/free-photo-of-ranti-marsyanda-chandri-anggara.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     });
   };
 
