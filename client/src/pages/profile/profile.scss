@@ -3,115 +3,175 @@
 .profile {
   @include themify($themes) {
     background-color: themed("bgSoft");
+    display: flex;
+    justify-items: center;
 
-    .images {
-      width: 100%;
-      height: 300px;
-      position: relative;
+    .left {
+      flex: 10;
+      padding: 20px 50px;
+      gap: 20px;
 
-      .cover {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      .profilePic {
-        width: 200px;
-        height: 200px;
-        border-radius: 50%;
-        object-fit: cover;
-        position: absolute;
-        left: 0;
-        right: 0;
-        margin: auto;
-        top: 200px;
-      }
-    }
-    .profileContainer {
-      padding: 20px 70px;
-      @include mobile{
-        padding: 10px;
-      }
-
-      .uInfo {
-        height: 180px;
+      .profileContainer {
         -webkit-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
         -moz-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
         box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
-        border-radius: 20px;
         background-color: themed("bg");
         color: themed("textColor");
-        padding: 50px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        border-radius: 20px;
+        border: 1px solid themed("border");
         margin-bottom: 20px;
 
         @include mobile {
-          flex-direction: column;
-          height: 30vh;
-          padding: 20px;
-          margin-top: 100px;
+          padding: 10px;
         }
 
-        .left {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
+        .images {
+          width: 100%;
+          height: 200px;
+          position: relative;
 
-          a {
-            color: themed("textColorSoft");
-          }
-        }
-
-        .center {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 10px;
-
-          span {
-            font-size: 30px;
-            font-weight: 500;
-          }
-
-          .info {
+          .cover {
             width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px 15px 0 0;
+          }
+
+          .profilePic {
+            width: 152px;
+            height: 152px;
+            border-radius: 50%;
+            border: 5px solid white;
+            object-fit: cover;
+            position: absolute;
+            left: 24px;
+            margin: auto;
+            top: 92px;
+          }
+        }
+        .uInfo {
+          padding: 50px;
+          display: flex;
+          justify-content: space-between;
+
+          @include mobile {
+            flex-direction: column;
+            height: 30vh;
+            padding: 20px;
+            margin-top: 100px;
+          }
+
+          .uInfoLeft {
             display: flex;
-            align-items: center;
-            justify-content: space-around;
+            flex-direction: column;
+            gap: 5px;
 
-            .item {
+            .userName {
+              font-size: 28px;
+              font-weight: bold;
+            }
+            .userDesc {
+              margin-top: 10px;
+              font-size: 16px;
+            }
+            .major {
+              font-size: 14px;
+            }
+          }
+          .uInfoRight {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            .items {
               display: flex;
-              align-items: center;
-              gap: 5px;
-              color: themed("textColorSoft");
+              gap: 40px;
+              font-size: 14px;
+              .item {
+                .count {
+                  font-weight: bold;
+                }
+                span {
+                  color: themed("textColorSoft");
+                }
+              }
+            }
+            .connect {
+              display: flex;
+              gap: 20px;
 
-              span {
-                font-size: 12px;
+              .follow {
+                padding: 5px 30px;
+                border-radius: 15px;
+                border: none;
+                background-color: #8095ff;
+                color: white;
+                font-size: 16px;
+                cursor: pointer;
+              }
+              .message {
+                padding: 5px 30px;
+                border-radius: 15px;
+                border: 2px solid #8095ff;
+                background-color: themed("bg");
+                color: #8095ff;
+                font-size: 16px;
+                cursor: pointer;
               }
             }
           }
-          button {
-            border: none;
-            background-color: #8095ff;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-          }
-        }
-
-        .right {
-          flex: 1;
-          display: flex;
-          align-items: center;
-          justify-content: flex-end;
-          gap: 10px;
         }
       }
+
+      .highlight {
+        -webkit-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+        -moz-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+        box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+        background-color: themed("bg");
+        color: themed("textColor");
+        border-radius: 20px;
+        margin-bottom: 20px;
+        padding: 50px;
+
+        @include mobile {
+          padding: 10px;
+        }
+        span {
+          font-size: 24px;
+          // font-weight: bold;
+        }
+        .highlightContainer {
+          display: flex;
+          gap: 60px;
+          padding: 10px;
+
+          .courses, .skills {
+            flex: 1;
+            .title {
+              font-size: 18px;
+              margin-top: 0;
+            }
+            .items {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 10px;
+              margin-top: 10px;
+              .item {
+                padding: 5px 10px;
+                border-radius: 15px;
+                border: 1px solid themed("textColorSoft");
+                background-color: themed("bg");
+                color: themed("textColorSoft");
+                font-size: 12px;
+                // margin-bottom: 10px;
+              }
+            }
+          }
+
+        }
+      }
+    }
+    .right {
+      flex: 4;
     }
   }
 }
