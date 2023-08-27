@@ -17,11 +17,15 @@ function Post({ post }) {
   const [liked, setLiked] = useState(false);
   console.log("post", post);
 
-  const { data: user } = useQuery(["user"], () =>
+  const {isLoading, error,  data: user } = useQuery(["user", post.userId], () =>
     makeRequest.get(`/users/${post.userId}`).then((res) => {
       return res.data;
     })
   );
+  if (isLoading) return "Loading...";
+
+  if (error) return "An error has occurred: " + error.message;
+
   console.log("user", user);
 
   const handleClick = () => {
