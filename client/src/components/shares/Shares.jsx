@@ -11,7 +11,7 @@ function Shares(props) {
   return (
     <div className="share">
       <div className="container">
-        <Link to={`/profile/${currentUser.id}`} style={{textDecoration: "none", color: "inherit"}}>
+        <Link to={`/profile/${currentUser.userId}`} style={{textDecoration: "none", color: "inherit"}}>
           <div className="userInfo">
             <img src={currentUser.profilePic} alt="avatar" />
             <span className="name">{currentUser.name}</span>

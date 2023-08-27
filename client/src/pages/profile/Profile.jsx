@@ -3,46 +3,55 @@ import Posts from "../../components/posts/Posts";
 import RightBar from "../../components/rightbar/RightBar";
 import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
+import { useQuery } from "react-query";
+import { makeRequest } from "../../axios";
+import { useParams } from "react-router-dom";
 
 function Profile(props) {
-  const { currentUser } = useContext(AuthContext);
+  const { id: userId } = useParams();
+  const {
+    isLoading,
+    error,
+    data: user,
+  } = useQuery(["user"], () =>
+    makeRequest.get(`/users/${userId}`).then((res) => {
+      return res.data;
+    })
+  );
+  if (isLoading) return "Loading...";
+
+  if (error) return "An error has occurred: " + error.message;
+
+  const { data: posts } = useQuery(["profilePosts"], () =>
+    makeRequest.get(`/post/user/${userId}`).then((res) => {
+      return res.data;
+    })
+  );
+
+  console.log('posts',posts);
 
   return (
     <div className="profile">
       <div className="left">
         <div className="profileContainer">
           <div className="images">
-            <img
-              src={
-                "https://images.pexels.com/photos/5169050/pexels-photo-5169050.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-              }
-              alt=""
-              className="cover"
-            />
-            <img
-              src={
-                "https://images.pexels.com/photos/16943679/pexels-photo-16943679/free-photo-of-ranti-marsyanda-chandri-anggara.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-              }
-              alt=""
-              className="profilePic"
-            />
+            <img src={user.cover} alt="" className="cover" />
+            <img src={user.profilePic} alt="" className="profilePic" />
           </div>
           <div className="uInfo">
             <div className="uInfoLeft">
-              <div className="userName">{currentUser.name}</div>
-              <div className="userDesc">
-                Final year postgraduate student at Information Technology
-              </div>
-              <div className="major">Master of Information Technology</div>
+              <div className="userName">{user.userName}</div>
+              <div className="userDesc">{user.desc}</div>
+              <div className="major">{user.major}</div>
             </div>
             <div className="uInfoRight">
               <div className="items">
                 <div className="item">
-                  <div className="count">100</div>
+                  <div className="count">{user.followings.length}</div>
                   <span>Followings</span>
                 </div>
                 <div className="item">
-                  <div className="count">102</div>
+                  <div className="count">{user.followers.length}</div>
                   <span>Followers</span>
                 </div>
                 <div className="item">

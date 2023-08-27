@@ -40,6 +40,14 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    desc: {
+      type: String,
+      default: "",
+    },
+    major: {
+      type: String,
+      default: "",
+    }
   },
   { timestamps: true }
 );

@@ -15,7 +15,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Delete A POST
+// DELETE A POST
 router.delete("/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -30,7 +30,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// Update A POST
+// UPDATE A POST
 router.put("/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -45,7 +45,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Get ALL POST
+// GET All POSTS
 router.get("/", async (req, res) => {
   try {
     const currentUser = await User.findById(req.query.userId);
@@ -55,16 +55,15 @@ router.get("/", async (req, res) => {
     }).sort({ createdAt: -1 });
 
     res.status(200).json(posts);
-    console.log('posts', posts);
   } catch (error) {
     return res.status(500).json(error);
   }
 });
 
-// Get A POST
-router.get("/:id", async (req, res) => {
+// GET PROFILE POST
+router.get("/user/:id", async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    const post = await Post.find({ userId: req.params.id });
     res.status(200).json(post);
   } catch (error) {
     return res.status(500).json(error);

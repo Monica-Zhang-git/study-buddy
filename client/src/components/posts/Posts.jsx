@@ -13,7 +13,6 @@ function Posts(userId) {
       return res.data;
     })
   );
-  // console.log('posts', posts);
 
   if (isLoading) return "Loading...";
 

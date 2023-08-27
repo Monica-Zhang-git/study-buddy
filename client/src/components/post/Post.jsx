@@ -15,9 +15,12 @@ function Post({ post }) {
   const [commentOpen, setCommentOpen] = useState(false);
 
   const [liked, setLiked] = useState(false);
-  console.log("post", post);
 
-  const {isLoading, error,  data: user } = useQuery(["user", post.userId], () =>
+  const {
+    isLoading,
+    error,
+    data: user,
+  } = useQuery(["user", post.userId], () =>
     makeRequest.get(`/users/${post.userId}`).then((res) => {
       return res.data;
     })
@@ -26,7 +29,6 @@ function Post({ post }) {
 
   if (error) return "An error has occurred: " + error.message;
 
-  console.log("user", user);
 
   const handleClick = () => {
     setLiked(!liked);
@@ -36,17 +38,23 @@ function Post({ post }) {
       <div className="container">
         <div className="user">
           <div className="userInfo">
-            <img src={user.profilePic} alt="avatar" />
+            <Link
+              to={`/profile/${post.userId}`}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <img src={user.profilePic} alt="avatar" />
+            </Link>
             <div className="details">
               <Link
                 to={`/profile/${post.userId}`}
                 style={{ textDecoration: "none", color: "inherit" }}
               >
-                <span className="name">{user.userName}</span>
+              <span className="name">{user.userName}</span>
               </Link>
               <span className="date">{moment(post.createdAt).fromNow()}</span>
             </div>
           </div>
+
           <MoreHorizIcon />
         </div>
         <div className="content">
