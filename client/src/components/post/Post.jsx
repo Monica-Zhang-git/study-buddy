@@ -7,29 +7,40 @@ import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Comments from "../comments/Comments";
 import { useState } from "react";
+import { useQuery } from "react-query";
+import { makeRequest } from "../../axios";
+import moment from "moment";
 
 function Post({ post }) {
   const [commentOpen, setCommentOpen] = useState(false);
 
-  // const liked = false;
   const [liked, setLiked] = useState(false);
-  const handleClick = ()=>{
+  console.log("post", post);
+
+  const { data: user } = useQuery(["user"], () =>
+    makeRequest.get(`/users/${post.userId}`).then((res) => {
+      return res.data;
+    })
+  );
+  console.log("user", user);
+
+  const handleClick = () => {
     setLiked(!liked);
-  }
+  };
   return (
     <div className="post">
       <div className="container">
         <div className="user">
           <div className="userInfo">
-            <img src={post.profilePic} alt="" />
+            <img src={user.profilePic} alt="avatar" />
             <div className="details">
               <Link
                 to={`/profile/${post.userId}`}
                 style={{ textDecoration: "none", color: "inherit" }}
               >
-                <span className="name">{post.name}</span>
+                <span className="name">{user.userName}</span>
               </Link>
-              <span className="date">1 min ago</span>
+              <span className="date">{moment(post.createdAt).fromNow()}</span>
             </div>
           </div>
           <MoreHorizIcon />
@@ -40,7 +51,11 @@ function Post({ post }) {
         </div>
         <div className="info">
           <div className="item" onClick={handleClick}>
-            {liked ? <FavoriteIcon style={{color:"red"}}/> : <FavoriteBorderIcon  />}
+            {liked ? (
+              <FavoriteIcon style={{ color: "red" }} />
+            ) : (
+              <FavoriteBorderIcon />
+            )}
             12 Likes
           </div>
           <div className="item" onClick={() => setCommentOpen(!commentOpen)}>

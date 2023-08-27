@@ -1,12 +1,7 @@
 import "./profile.scss";
-import PlaceIcon from "@mui/icons-material/Place";
-import LanguageIcon from "@mui/icons-material/Language";
-import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Posts from "../../components/posts/Posts";
 import RightBar from "../../components/rightbar/RightBar";
 import { useContext } from "react";
-
 import { AuthContext } from "../../context/authContext";
 
 function Profile(props) {
