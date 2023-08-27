@@ -1,5 +1,6 @@
 import express from "express";
 import { Post } from "../db/post-schema.js";
+import { User } from "../db/user-schema.js";
 
 const router = express.Router();
 
@@ -39,6 +40,22 @@ router.put("/:id", async (req, res) => {
     } else {
       return res.status(403).json("You can only update your own post.");
     }
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+});
+
+// Get ALL POST
+router.get("/", async (req, res) => {
+  try {
+    const currentUser = await User.findById(req.query.userId);
+    const followingIds = currentUser.followings;
+    const posts = await Post.find({
+      userId: { $in: [currentUser._id, ...followingIds] },
+    }).sort({ createdAt: -1 });
+
+    res.status(200).json(posts);
+    console.log('posts', posts);
   } catch (error) {
     return res.status(500).json(error);
   }
