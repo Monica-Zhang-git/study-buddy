@@ -14,8 +14,10 @@ function Posts({ username }) {
     data: posts,
   } = useQuery(["Posts", username, currentUser.userId], async () => {
     const res = username
-      ? await makeRequest.get(`/post/profile/${username}`)
-      : await makeRequest.get(`/post/community/${currentUser.userId}`);
+      ? // Get Profile Post
+        await makeRequest.get(`/post/${username}`)
+      : // Get Community Post
+        await makeRequest.get(`/post/${currentUser.userId}`);
 
     return res.data;
   });

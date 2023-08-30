@@ -45,34 +45,63 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Update this router later to get post based on username if existed
-
-// GET All POSTS
-router.get("/community/:id", async (req, res) => {
+// GET PROFILE POST OR COMMUNITY POST BASED ON IF USERNAME EXISTED
+router.get("/:identifier", async (req, res) => {
   try {
-    const currentUser = await User.findById(req.params.id);
-    const followingIds = currentUser.followings;
-    const posts = await Post.find({
-      userId: { $in: [currentUser._id, ...followingIds] },
-    }).sort({ createdAt: -1 });
+    const identifier = req.params.identifier;
+    console.log("identifier", identifier);
+
+    let posts;
+    // GET COMMUNITY POST
+    if (identifier.length === 24) {
+      const currentUser = await User.findById(identifier);
+      const followingIds = currentUser.followings;
+      posts = await Post.find({
+        userId: { $in: [currentUser._id, ...followingIds] },
+      }).sort({ createdAt: -1 });
+    }
+    // GET PROFILE POST
+    else {
+      const user = await User.findOne({ userName: identifier });
+      posts = await Post.find({ userId: user._id });
+    }
+
+    if (!posts) {
+      return res.status(404).json({ message: "Posts not found" });
+    }
 
     res.status(200).json(posts);
   } catch (error) {
-    return res.status(500).json(error);
+    res.status(500).json(error);
   }
 });
 
-// GET PROFILE POST
-router.get("/profile/:username", async (req, res) => {
-  try {
-    const user = await User.findOne({ userName: req.params.username });
-    // console.log('user',user);
-    const post = await Post.find({ userId: user._id });
-    // console.log('post',post);
-    res.status(200).json(post);
-  } catch (error) {
-    return res.status(500).json(error);
-  }
-});
+// // GET All POSTS
+// router.get("/community/:id", async (req, res) => {
+//   try {
+//     const currentUser = await User.findById(req.params.id);
+//     const followingIds = currentUser.followings;
+//     const posts = await Post.find({
+//       userId: { $in: [currentUser._id, ...followingIds] },
+//     }).sort({ createdAt: -1 });
+
+//     res.status(200).json(posts);
+//   } catch (error) {
+//     return res.status(500).json(error);
+//   }
+// });
+
+// // GET PROFILE POST
+// router.get("/profile/:username", async (req, res) => {
+//   try {
+//     const user = await User.findOne({ userName: req.params.username });
+//     // console.log('user',user);
+//     const post = await Post.find({ userId: user._id });
+//     // console.log('post',post);
+//     res.status(200).json(post);
+//   } catch (error) {
+//     return res.status(500).json(error);
+//   }
+// });
 
 export default router;
