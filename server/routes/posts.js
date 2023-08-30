@@ -45,10 +45,12 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+// Update this router later to get post based on username if existed
+
 // GET All POSTS
-router.get("/", async (req, res) => {
+router.get("/community/:id", async (req, res) => {
   try {
-    const currentUser = await User.findById(req.query.userId);
+    const currentUser = await User.findById(req.params.id);
     const followingIds = currentUser.followings;
     const posts = await Post.find({
       userId: { $in: [currentUser._id, ...followingIds] },
@@ -61,9 +63,12 @@ router.get("/", async (req, res) => {
 });
 
 // GET PROFILE POST
-router.get("/user/:id", async (req, res) => {
+router.get("/profile/:username", async (req, res) => {
   try {
-    const post = await Post.find({ userId: req.params.id });
+    const user = await User.findOne({ userName: req.params.username });
+    // console.log('user',user);
+    const post = await Post.find({ userId: user._id });
+    // console.log('post',post);
     res.status(200).json(post);
   } catch (error) {
     return res.status(500).json(error);

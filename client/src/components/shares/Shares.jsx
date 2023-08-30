@@ -8,13 +8,14 @@ import VideocamIcon from "@mui/icons-material/Videocam";
 
 function Shares(props) {
   const { currentUser } = useContext(AuthContext);
+  console.log('currentUser',currentUser);
   return (
     <div className="share">
       <div className="container">
-        <Link to={`/profile/${currentUser.userId}`} style={{textDecoration: "none", color: "inherit"}}>
+        <Link to={`/profile/${currentUser.username}`} style={{textDecoration: "none", color: "inherit"}}>
           <div className="userInfo">
             <img src={currentUser.profilePic} alt="avatar" />
-            <span className="name">{currentUser.name}</span>
+            <span className="name">{currentUser.username}</span>
           </div>
         </Link>
         <div className="content">

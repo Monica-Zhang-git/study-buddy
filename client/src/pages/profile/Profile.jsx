@@ -1,34 +1,25 @@
 import "./profile.scss";
 import Posts from "../../components/posts/Posts";
 import RightBar from "../../components/rightbar/RightBar";
-import { useContext } from "react";
-import { AuthContext } from "../../context/authContext";
 import { useQuery } from "react-query";
 import { makeRequest } from "../../axios";
 import { useParams } from "react-router-dom";
 
 function Profile(props) {
-  const { id: userId } = useParams();
+  const username = useParams().username;
+
   const {
     isLoading,
     error,
     data: user,
   } = useQuery(["user"], () =>
-    makeRequest.get(`/users/${userId}`).then((res) => {
+    makeRequest.get(`/users/${username}`).then((res) => {
       return res.data;
     })
   );
   if (isLoading) return "Loading...";
 
   if (error) return "An error has occurred: " + error.message;
-
-  const { data: posts } = useQuery(["profilePosts"], () =>
-    makeRequest.get(`/post/user/${userId}`).then((res) => {
-      return res.data;
-    })
-  );
-
-  console.log('posts',posts);
 
   return (
     <div className="profile">
@@ -96,7 +87,7 @@ function Profile(props) {
             </div>
           </div>
         </div>
-        <Posts />
+        <Posts username={username} />
       </div>
       <RightBar />
     </div>

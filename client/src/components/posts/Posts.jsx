@@ -1,18 +1,24 @@
 import "./posts.scss";
 import Post from "../post/Post";
-import { useQuery } from "react-query";
 import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
 import { makeRequest } from "../../axios";
+import { useQuery } from "react-query";
 
-function Posts(userId) {
+function Posts({ username }) {
   const { currentUser } = useContext(AuthContext);
 
-  const { isLoading, error, data: posts } = useQuery(["posts"], () =>
-    makeRequest.get("/post?userId=" + currentUser.userId).then((res) => {
-      return res.data;
-    })
-  );
+  const {
+    isLoading,
+    error,
+    data: posts,
+  } = useQuery(["Posts", username, currentUser.userId], async () => {
+    const res = username
+      ? await makeRequest.get(`/post/profile/${username}`)
+      : await makeRequest.get(`/post/community/${currentUser.userId}`);
+
+    return res.data;
+  });
 
   if (isLoading) return "Loading...";
 
@@ -20,9 +26,7 @@ function Posts(userId) {
 
   return (
     <div className="posts">
-      {posts.map((post) => (
-        <Post post={post} key={post._id} />
-      ))}
+      {posts && posts.map((post) => <Post post={post} key={post._id} />)}
     </div>
   );
 }

@@ -12,7 +12,7 @@ export const AuthContextProvider = ({ children }) => {
     setCurrentUser({
       userId: "64e6c92f8b807e70786d1c76",
       id: 1,
-      name: "Jenny chen",
+      username: "Jenny",
       profilePic:
         "https://images.pexels.com/photos/16943679/pexels-photo-16943679/free-photo-of-ranti-marsyanda-chandri-anggara.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     });

@@ -29,7 +29,6 @@ function Post({ post }) {
 
   if (error) return "An error has occurred: " + error.message;
 
-
   const handleClick = () => {
     setLiked(!liked);
   };
@@ -39,17 +38,17 @@ function Post({ post }) {
         <div className="user">
           <div className="userInfo">
             <Link
-              to={`/profile/${post.userId}`}
+              to={`/profile/${user.userName}`}
               style={{ textDecoration: "none", color: "inherit" }}
             >
               <img src={user.profilePic} alt="avatar" />
             </Link>
             <div className="details">
               <Link
-                to={`/profile/${post.userId}`}
+                to={`/profile/${user.userName}`}
                 style={{ textDecoration: "none", color: "inherit" }}
               >
-              <span className="name">{user.userName}</span>
+                <span className="name">{user.userName}</span>
               </Link>
               <span className="date">{moment(post.createdAt).fromNow()}</span>
             </div>

@@ -47,14 +47,10 @@ const userSchema = new mongoose.Schema(
     major: {
       type: String,
       default: "",
-    }
+    },
   },
   { timestamps: true }
 );
 
-
 const User = mongoose.model("User", userSchema);
 export { User };
-
-
-

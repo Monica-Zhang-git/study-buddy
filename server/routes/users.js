@@ -4,10 +4,22 @@ import bcrypt from "bcrypt";
 
 const router = express.Router();
 
-// GET A USER
-router.get("/:id", async (req, res) => {
+// GET A USER BY USERNAME OR USERID
+router.get("/:identifier", async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const identifier = req.params.identifier;
+
+    let user;
+    if (identifier.length === 24) {
+      user = await User.findById(identifier);
+    } else {
+      user = await User.findOne({ userName: identifier });
+    }
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
     const { password, updatedAt, createdAt, ...other } = user._doc;
     res.status(200).json(other);
   } catch (error) {

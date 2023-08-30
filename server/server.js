@@ -10,6 +10,7 @@ import userRoute from "./routes/users.js";
 import authRoute from "./routes/auth.js";
 import connectRoute from "./routes/connection.js";
 import postRoute from "./routes/posts.js";
+import profileRoute from "./routes/profile.js";
 
 //Setup Express
 const app = express();
@@ -25,7 +26,7 @@ app.use("/api/users", userRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/connection", connectRoute);
 app.use("/api/post", postRoute);
-
+app.use("/api/profile", profileRoute);
 
 
 // Start the server running. Once the server is running, the given function will be called, which will
