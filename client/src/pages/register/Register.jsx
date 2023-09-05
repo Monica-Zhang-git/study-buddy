@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { makeRequest } from "../../axios";
-import { useNavigate } from "react-router-dom";
 
 // Register form validation
 const schema = yup
@@ -34,8 +33,6 @@ function Register(props) {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const navigate = useNavigate();
-
   const onSubmit = async (data) => {
     const user = {
       userName: data.userName,
@@ -43,8 +40,8 @@ function Register(props) {
       password: data.password,
     };
     try {
-      await makeRequest.post("/auth/register", user);
-      navigate("/login");
+      (await makeRequest.post("/auth/register", user));
+      alert("Registration successful!");
     } catch (error) {
       console.log(error);
     }
