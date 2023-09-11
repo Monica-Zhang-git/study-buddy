@@ -4,7 +4,7 @@ import { AuthContext } from "../../context/authContext";
 import "./share.scss";
 import { Link } from "react-router-dom";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
-import VideocamIcon from "@mui/icons-material/Videocam";
+import TagIcon from '@mui/icons-material/Tag';
 
 function Shares(props) {
   const { currentUser } = useContext(AuthContext);
@@ -31,14 +31,15 @@ function Shares(props) {
               <input type="file" id="file" />
               <label htmlFor="file">
                 <InsertPhotoIcon />
-                <span htmlFor="file">Add photo</span>
+                <span htmlFor="file">Add File</span>
               </label>
             </div>
+            {/* Add Course Tags or Skills Tags */}
             <div className="item">
               <input type="file" id="file" />
               <label htmlFor="file">
-                <VideocamIcon />
-                <span htmlFor="file">Add video</span>
+                <TagIcon />
+                <span htmlFor="file">Add Tags</span>
               </label>
             </div>
           </div>
