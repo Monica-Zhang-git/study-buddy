@@ -57,8 +57,12 @@ function Post({ post }) {
           <MoreHorizIcon />
         </div>
         <div className="content">
+          {/* Post content */}
           <p>{post.desc}</p>
+          {/* Post Images */}
           <img src={post.img} alt="" />
+          {/* Tags  */}
+          {post.tags && post.tags.map(tag => <p className="tags">#{tag}</p>)}
         </div>
         <div className="info">
           <div className="item" onClick={handleClick}>
