@@ -13,7 +13,7 @@ export const AuthContextProvider = ({ children }) => {
       withCredentials: true,
     });
 
-    setCurrentUser(res);
+    setCurrentUser(res.data);
   };
 
   useEffect(() => {
