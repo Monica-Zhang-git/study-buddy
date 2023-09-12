@@ -1,9 +1,8 @@
 import "./login.scss";
 import { Link } from "react-router-dom";
-import { useContext } from "react";
 import { useForm } from "react-hook-form";
+import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
-import { makeRequest } from "../../axios";
 import { useNavigate } from "react-router-dom";
 
 function Login(props) {
@@ -14,6 +13,8 @@ function Login(props) {
   } = useForm();
 
   const navigate = useNavigate();
+  
+  const { login } = useContext(AuthContext);
 
   const onSubmit = async (data) => {
     const user = {
@@ -21,7 +22,7 @@ function Login(props) {
       password: data.password,
     };
     try {
-      await makeRequest.post("/auth/login", user);
+      await login(user);
       navigate("/");
     } catch (error) {
       console.log("error", error);
@@ -45,7 +46,7 @@ function Login(props) {
         <div className="right">
           <h1>Login</h1>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <input {...register("email")} type="text" placeholder="Email" />
+            <input {...register("email")} type="email" placeholder="Email" />
             <input
               {...register("password")}
               type="password"
