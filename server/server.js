@@ -20,10 +20,17 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    // origin: "http://localhost:5173",
+    origin: [
+      "https://study-buddy-fbxwqa24k-monica-zhang-git.vercel.app",
+      "https://study-buddy-pf9251jco-monica-zhang-git.vercel.app",
+      "http://localhost:5173",
+    ],
+
     credentials: true,
   })
 );
+
 app.use(helmt());
 app.use(morgan("common"));
 
