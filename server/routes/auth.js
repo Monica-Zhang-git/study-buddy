@@ -1,6 +1,8 @@
 import express from "express";
-import { User } from "../db/user-schema.js"; 
+import { User } from "../db/user-schema.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
 const router = express.Router();
 
 // REGISTER
@@ -29,15 +31,23 @@ router.post("/login", async (req, res) => {
     if (!user) {
       res.status(404).json("User not found");
     }
-    // valid hashedpassword
+    // Valid hashedpassword
     const validPassword = await bcrypt.compare(
       req.body.password,
       user.password
     );
     if (!validPassword) {
-      res.status(400).json("Wrong Password");
+      res.status(400).json("Wrong Password or username");
     }
-    res.status(200).json(user);
+    // After successfully finding the user and validating the password
+    // Generate a JWT token
+    const token = jwt.sign({ userId: user._id }, "secretkey", {
+      expiresIn: "30d", 
+    });
+    // Remove the password 
+    const { password, ...others} = user._doc;
+    // Save the token into localStorage and send the data and token to client
+    res.cookie("accessToken", token, {httpOnly: true}).status(200).json(others);
   } catch (err) {
     res.status(500).json(err);
   }
