@@ -1,9 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./register.scss";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { makeRequest } from "../../axios";
+import Alert from "@mui/material/Alert";
+import { useState } from "react";
 
 // Register form validation
 const schema = yup
@@ -31,7 +33,12 @@ function Register(props) {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({ resolver: yupResolver(schema) });
+
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
+
+  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     const user = {
@@ -40,8 +47,12 @@ function Register(props) {
       password: data.password,
     };
     try {
-      (await makeRequest.post("/auth/register", user));
-      alert("Registration successful!");
+      await makeRequest.post("/auth/register", user);
+      setRegistrationSuccess(true); // Use state to control the visibility of the Alert
+      reset(); // Reset the form fields
+      setTimeout(() => {
+        navigate("/login");
+      }, 5000); // Redirect to login page after 5 seconds
     } catch (error) {
       console.log(error);
     }
@@ -85,6 +96,12 @@ function Register(props) {
 
             <input type="submit" className="submit" />
           </form>
+
+          {registrationSuccess && (
+            <Alert severity="success">
+              Registration successful! Redirecting to login page in 5 seconds...
+            </Alert>
+          )}
         </div>
         <div className="right">
           <h1>Study Buddy</h1>
