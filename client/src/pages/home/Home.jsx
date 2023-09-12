@@ -19,7 +19,7 @@ function home(props) {
         <div className="center">
           {/* <Stories /> */}
           <Shares />
-          <Posts/>
+          <Posts />
         </div>
         <RightBar />
       </div>

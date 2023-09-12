@@ -8,14 +8,14 @@ import TagIcon from '@mui/icons-material/Tag';
 
 function Shares(props) {
   const { currentUser } = useContext(AuthContext);
-  console.log('currentUser',currentUser);
+
   return (
     <div className="share">
       <div className="container">
-        <Link to={`/profile/${currentUser.username}`} style={{textDecoration: "none", color: "inherit"}}>
+        <Link to={`/profile/${currentUser.userName}`} style={{textDecoration: "none", color: "inherit"}}>
           <div className="userInfo">
             <img src={currentUser.profilePic} alt="avatar" />
-            <span className="name">{currentUser.username}</span>
+            <span className="name">{currentUser.userName}</span>
           </div>
         </Link>
         <div className="content">

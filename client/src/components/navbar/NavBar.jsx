@@ -23,7 +23,9 @@ function NavBar(props) {
         <Link to="/" style={{ textDecoration: "none" }}>
           <span>Study Buddy</span>
         </Link>
-        <HomeOutlinedIcon />
+        <Link to="/" style={{ textDecoration: "none" }}>
+          <HomeOutlinedIcon />
+        </Link>
         {darkMode ? (
           <DarkModeOutlinedIcon
             onClick={toggle}

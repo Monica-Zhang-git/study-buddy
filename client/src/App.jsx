@@ -59,6 +59,14 @@ function App() {
           path: "/profile/:username",
           element: <Profile />,
         },
+        // {
+        //   path: "/messaging",
+        //   element: <Messaging />,
+        // },
+        // {
+        //   path: "/settings",
+        //   element: <Settings />,
+        // },
       ],
     },
     {

@@ -7,6 +7,7 @@ import { useQuery } from "react-query";
 
 function Posts({ username }) {
   const { currentUser } = useContext(AuthContext);
+  console.log('currentUser',currentUser);
 
   const {
     isLoading,
@@ -17,7 +18,7 @@ function Posts({ username }) {
       ? // Get Profile Post
         await makeRequest.get(`/post/${username}`)
       : // Get Community Post
-        await makeRequest.get(`/post/${currentUser.userId}`);
+        await makeRequest.get(`/post/${currentUser._id}`);
 
     return res.data;
   });
