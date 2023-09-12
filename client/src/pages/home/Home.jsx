@@ -17,7 +17,7 @@ function home(props) {
       <div style={{ display: "flex" }}>
         <LeftBar />
         <div className="center">
-          <Stories />
+          {/* <Stories /> */}
           <Shares />
           <Posts/>
         </div>

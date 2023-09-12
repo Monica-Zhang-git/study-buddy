@@ -58,7 +58,7 @@ function Post({ post }) {
         </div>
         <div className="content">
           {/* Post content */}
-          <p>{post.desc}</p>
+          <p>{post.desc}</p> 
           {/* Post Images */}
           <img src={post.img} alt="" />
           {/* Tags  */}

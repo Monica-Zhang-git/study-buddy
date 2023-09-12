@@ -21,7 +21,7 @@ function Shares(props) {
         <div className="content">
           <input
             type="text"
-            placeholder={`What's on your mind, ${currentUser.name}?`}
+            placeholder={`What's on your mind, undefined?`}
           />
         </div>
         <hr />
