@@ -18,7 +18,12 @@ const port = process.env.PORT || 3000;
 
 //Middleware
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(helmt());
 app.use(morgan("common"));
 
@@ -27,7 +32,6 @@ app.use("/api/auth", authRoute);
 app.use("/api/connection", connectRoute);
 app.use("/api/post", postRoute);
 app.use("/api/profile", profileRoute);
-
 
 // Start the server running. Once the server is running, the given function will be called, which will
 // log a simple message to the server console. Any console.log() statements in your node.js code
