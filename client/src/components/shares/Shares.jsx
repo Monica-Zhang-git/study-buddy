@@ -12,12 +12,14 @@ function Shares(props) {
   return (
     <div className="share">
       <div className="container">
+        {/* UserInfo */}
         <Link to={`/profile/${currentUser.userName}`} style={{textDecoration: "none", color: "inherit"}}>
           <div className="userInfo">
             <img src={currentUser.profilePic} alt="avatar" />
             <span className="name">{currentUser.userName}</span>
           </div>
         </Link>
+        {/* Input Content  */}
         <div className="content">
           <input
             type="text"
@@ -25,6 +27,7 @@ function Shares(props) {
           />
         </div>
         <hr />
+        {/* Add attachment  */}
         <div className="attachment">
           <div className="left">
             <div className="item">
