@@ -1,7 +1,7 @@
 import "./profile.scss";
 import Posts from "../../components/posts/Posts";
 import RightBar from "../../components/rightbar/RightBar";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import { useParams } from "react-router-dom";
 

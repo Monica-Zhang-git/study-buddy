@@ -7,7 +7,7 @@ import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Comments from "../comments/Comments";
 import { useState } from "react";
-import {useQuery} from "react-query";
+import {useQuery} from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import moment from "moment";
 
