@@ -2,10 +2,13 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 import express from "express";
+import path from "path";
+import * as url from "url";
 import mongoose from "mongoose";
 import cors from "cors";
 import helmt from "helmet";
 import morgan from "morgan";
+
 import userRoute from "./routes/users.js";
 import authRoute from "./routes/auth.js";
 import connectRoute from "./routes/connection.js";
@@ -17,10 +20,10 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 //Middleware
+// Setup JSON parsing for the request body
 app.use(express.json());
 app.use(
   cors({
-    // origin: "http://localhost:5173",
     origin: ["https://study-buddy-steel.vercel.app", "http://localhost:5173"],
 
     credentials: true,
@@ -30,6 +33,7 @@ app.use(
 app.use(helmt());
 app.use(morgan("common"));
 
+// Setup API routes.
 app.use("/api/users", userRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/connection", connectRoute);

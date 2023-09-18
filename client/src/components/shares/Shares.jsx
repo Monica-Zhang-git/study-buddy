@@ -27,7 +27,6 @@ function Shares(props) {
           />
         </div>
         <hr />
-        {/* Add attachment  */}
         <div className="attachment">
           <div className="left">
             <div className="item">

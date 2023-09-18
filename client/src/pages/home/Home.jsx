@@ -8,6 +8,7 @@ import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
 import { useQuery } from "react-query";
 import { makeRequest } from "../../axios";
+import ShareTest from "../../components/ShareTest";
 
 function home(props) {
   const { currentUser } = useContext(AuthContext);
@@ -18,6 +19,7 @@ function home(props) {
         <LeftBar />
         <div className="center">
           {/* <Stories /> */}
+          {/* <ShareTest /> */}
           <Shares />
           <Posts />
         </div>

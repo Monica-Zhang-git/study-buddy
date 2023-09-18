@@ -3,11 +3,10 @@ import Post from "../post/Post";
 import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
 import { makeRequest } from "../../axios";
-import { useQuery } from "react-query";
+import {useQuery} from "@tanstack/react-query";
 
 function Posts({ username }) {
   const { currentUser } = useContext(AuthContext);
-  console.log('currentUser',currentUser);
 
   const {
     isLoading,
