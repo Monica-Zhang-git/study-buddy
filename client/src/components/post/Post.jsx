@@ -7,7 +7,7 @@ import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Comments from "../comments/Comments";
 import { useState } from "react";
-import {useQuery} from "@tanstack/react-query";
+import {useQuery} from "react-query";
 import { makeRequest } from "../../axios";
 import moment from "moment";
 
@@ -64,7 +64,7 @@ function Post({ post }) {
           {/* Post Images */}
           <img src={post.img} alt="" />
           {/* Tags  */}
-          {post.tags && post.tags.map((tag, index) => <p className="tags" key={index}>#{tag}</p>)}
+          {post.tags && post.tags.map((tag) => <p className="tags">#{tag}</p>)}
         </div>
         <div className="info">
           <div className="item" onClick={handleClick}>
