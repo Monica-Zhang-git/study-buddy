@@ -64,7 +64,7 @@ function Post({ post }) {
           {/* Post Images */}
           <img src={post.img} alt="" />
           {/* Tags  */}
-          {post.tags && post.tags.map((tag) => <p className="tags">#{tag}</p>)}
+          {post.tags && post.tags.map((tag, i) => <p className="tags" key={i}>#{tag}</p>)}
         </div>
         <div className="info">
           <div className="item" onClick={handleClick}>

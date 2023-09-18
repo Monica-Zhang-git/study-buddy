@@ -8,7 +8,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import helmt from "helmet";
 import morgan from "morgan";
-
+import multer from "multer";
 import userRoute from "./routes/users.js";
 import authRoute from "./routes/auth.js";
 import connectRoute from "./routes/connection.js";
@@ -32,6 +32,25 @@ app.use(
 
 app.use(helmt());
 app.use(morgan("common"));
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "public/images");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage });
+
+app.post("/api/upload", upload.single("file"), (req, res) => {
+  try {
+    return res.status(200).json("File uploaded successfully!");
+  } catch (error) {
+    console.log("error", error);
+  }
+});
 
 // Setup API routes.
 app.use("/api/users", userRoute);

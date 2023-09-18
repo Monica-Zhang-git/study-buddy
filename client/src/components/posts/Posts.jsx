@@ -7,7 +7,6 @@ import {useQuery} from "@tanstack/react-query";
 
 function Posts({ username }) {
   const { currentUser } = useContext(AuthContext);
-  console.log('currentUser',currentUser);
 
   const {
     isLoading,
