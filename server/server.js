@@ -33,6 +33,7 @@ app.use(
 app.use(helmt());
 app.use(morgan("common"));
 
+//Set up sotrage destination and filename
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "public/images");
@@ -42,6 +43,7 @@ const storage = multer.diskStorage({
   },
 });
 
+//Set up upload file api
 const upload = multer({ storage });
 
 app.post("/api/upload", upload.single("file"), (req, res) => {
