@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
 import "./share.scss";
@@ -6,33 +6,66 @@ import { Link } from "react-router-dom";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import TagIcon from "@mui/icons-material/Tag";
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 
 function Shares(props) {
   const { currentUser } = useContext(AuthContext);
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, setValue } = useForm();
+  const [file, setFile] = useState(null);
+
+  const queryClient = useQueryClient();
+
+  const upload = async (formData) => {
+    try {
+      const res = await makeRequest.post("/upload", formData);
+      console.log('upload response', res);
+      return res.data;
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const createPost = async (data) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    // Upload the file if it exists
+    let imgUrl = "";
+    if (file) {
+      imgUrl = await upload(formData);
+      console.log('imgUrl', imgUrl);
+    }
+
+    // Create the post
     const newPost = {
       userId: currentUser._id,
       desc: data.desc,
+      img: imgUrl,
     };
+    console.log('newPost',newPost);
     const response = await makeRequest.post("/post", newPost);
+    console.log('post success', response.data);
     return response.data;
   };
 
-  const { mutate } = useMutation({
+  const mutation = useMutation({
     mutationFn: createPost,
-  }
-  );
+    onSuccess: () => {
+      // Invalidate and refetch posts query
+      queryClient.invalidateQueries(["posts"]);
+      // Reset the form and file input
+      setValue("desc", "");
+      setFile(null);
+    },
+  });
 
   const handleFileUpload = (e) => {
-    const files = e.target.files;
+    setFile(e.target.files[0]);
   };
 
   const onSubmit = (data) => {
-    mutate(data);
+    mutation.mutate(data);
   };
 
   return (
@@ -67,7 +100,7 @@ function Shares(props) {
                   type="file"
                   id="file"
                   onChange={handleFileUpload}
-                  multiple
+                  // multiple
                 />
                 <label htmlFor="file">
                   <InsertPhotoIcon />
@@ -84,7 +117,7 @@ function Shares(props) {
               </div>
             </div>
             <div className="right">
-              <button>Post</button>
+              <button type="submit">Post</button>
             </div>
           </div>
         </form>

@@ -62,7 +62,7 @@ function Post({ post }) {
           {/* Post content */}
           <p>{post.desc}</p> 
           {/* Post Images */}
-          <img src={post.img} alt="" />
+          <img src={"/upload/" + post.img} alt="" />
           {/* Tags  */}
           {post.tags && post.tags.map((tag, i) => <p className="tags" key={i}>#{tag}</p>)}
         </div>
