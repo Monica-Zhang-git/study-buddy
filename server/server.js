@@ -2,8 +2,9 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 import express from "express";
+import { fileURLToPath } from "url";
 import path from "path";
-import * as url from "url";
+import { dirname } from "path";
 import mongoose from "mongoose";
 import cors from "cors";
 import helmt from "helmet";
@@ -19,27 +20,33 @@ import profileRoute from "./routes/profile.js";
 const app = express();
 const port = process.env.PORT || 3000;
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 //Middleware
 // Setup JSON parsing for the request body
 app.use(express.json());
+
 app.use(
   cors({
     origin: ["https://study-buddy-steel.vercel.app", "http://localhost:5173"],
-
     credentials: true,
   })
 );
 
-app.use(helmt());
+app.use(
+  helmt({
+    crossOriginResourcePolicy: false,
+  })
+);
 app.use(morgan("common"));
 
 //Set up sotrage destination and filename
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "../client/public/upload");
+    cb(null, "public/images");
   },
   filename: function (req, file, cb) {
-    // cb(null, file.originalname);
     cb(null, Date.now() + file.originalname);
   },
 });
@@ -48,21 +55,15 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 app.post("/api/upload", upload.single("file"), (req, res) => {
-
-
-  const file = req.file;
-  res.status(200).json(file.filename);
-
-  // try {
-  //   return res.status(200).json("File uploaded successfully!");
-  // } catch (error) {
-  //   console.log("error", error);
-  // }
+  try {
+    const file = req.file;
+    res.status(200).json(file.filename);
+  } catch (error) {
+    console.log("error", error);
+  }
 });
 
-
-// app.use(express.static(path.join(dirname, "/public/images")));
-
+app.use("/images", express.static(path.join(__dirname, "public/images")));
 
 // Setup API routes.
 app.use("/api/users", userRoute);
