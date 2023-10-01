@@ -1,44 +1,79 @@
 import "./comments.scss";
+import { useState } from "react";
 import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { makeRequest } from "../../axios";
+import moment from "moment";
 
-function Comments(props) {
+function Comments({ postId, onCommentSubmitted }) {
+  const [desc, setDesc] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
   const { currentUser } = useContext(AuthContext);
-  const comments = [
-    {
-      id: 1,
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem nequeaspernatur ullam aperiam. Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem nequeaspernatur ullam aperiam",
-      name: "Monica",
-      userId: 1,
-      profilePicture:
-        "https://images.pexels.com/photos/1313254/pexels-photo-1313254.jpeg?auto=compress&cs=tinysrgb&w=800",
+
+  const { isLoading, data: comments } = useQuery(
+    ["comments", postId],
+    async () => {
+      const res = await makeRequest.get(`/comment/${postId}`);
+      return res.data;
+    }
+  );
+
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation(
+    (newComment) => {
+      return makeRequest.post(`/comment`, newComment);
     },
     {
-      id: 2,
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem nequeaspernatur ullam aperiam",
-      name: "Jenny",
-      userId: 2,
-      profilePicture:
-        "https://images.pexels.com/photos/16943679/pexels-photo-16943679/free-photo-of-ranti-marsyanda-chandri-anggara.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    },
-  ];
+      onSuccess: () => {
+        queryClient.invalidateQueries(["comments"]);
+        onCommentSubmitted();
+      },
+    }
+  );
+
+  const handleComment = async (e) => {
+    e.preventDefault();
+    if (!desc) {
+      setErrorMessage("Please write a comment firstly.");
+      return;
+    }
+    setErrorMessage("");
+
+    mutation.mutate({ desc, postId });
+    setDesc("");
+  };
+
   return (
     <div className="comments">
       <div className="write">
         <img src={currentUser.profilePic} alt="" />
-        <input type="text" placeholder="write a comment" />
-        <button>send</button>
+        <input
+          type="text"
+          placeholder="write a comment"
+          value={desc}
+          onChange={(e) => setDesc(e.target.value)}
+        />
+        <button onClick={handleComment}>send</button>
       </div>
-      {comments.map((comment) => (
-        <div className="comment">
-          <img src={comment.profilePicture} alt="" />
-          <div className="info">
-            <span>{comment.name}</span>
-            <p>{comment.desc}</p>
-          </div>
-          <span className="date">1 hour ago</span>
-        </div>
-      ))}
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
+      {isLoading
+        ? "Loading..."
+        : comments &&
+          comments.map((comment) => (
+            <div className="comment">
+              <img src={comment.profilePic} alt="" />
+              <div className="info">
+                <span>{comment.userName}</span>
+                <p>{comment.desc}</p>
+              </div>
+              <span className="date">
+                {moment(comment.createdAt).fromNow()}
+              </span>
+            </div>
+          ))}
     </div>
   );
 }

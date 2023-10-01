@@ -7,32 +7,42 @@ import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Comments from "../comments/Comments";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { makeRequest } from "../../axios";
 import moment from "moment";
+import { useContext } from "react";
+import { AuthContext } from "../../context/authContext";
+import { makeRequest } from "../../axios";
+import MorePopper from "../morePopper/morePopper";
+import Button from "@mui/material/Button";
 
 function Post({ post }) {
   const PF = import.meta.env.VITE_PUBLIC_FOLDER;
+  const { currentUser } = useContext(AuthContext);
+
+  const [liked, setLiked] = useState(post.likes.includes(currentUser._id));
+  const [likesCount, setLikesCount] = useState(post.likes.length);
 
   const [commentOpen, setCommentOpen] = useState(false);
+  const [commentsCount, setCommentsCount] = useState(post.comments.length);
 
-  const [liked, setLiked] = useState(false);
+  // Open the more button
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const [placement, setPlacement] = useState();
 
-  const {
-    isLoading,
-    error,
-    data: user,
-  } = useQuery(["user", post.userId], () =>
-    makeRequest.get(`/users/${post.userId}`).then((res) => {
-      return res.data;
-    })
-  );
-  if (isLoading) return "Loading...";
+  const handleMoreOpen = (newPlacement) => (event) => {
+    setAnchorEl(event.currentTarget);
+    setMoreOpen((prev) => placement !== newPlacement || !prev);
+    setPlacement(newPlacement);
+  };
 
-  if (error) return "An error has occurred: " + error.message;
-
-  const handleClick = () => {
-    setLiked(!liked);
+  const handleClick = async () => {
+    try {
+      await makeRequest.put(`/post/${post._id}/like`);
+      setLiked(!liked);
+      setLikesCount(liked ? likesCount - 1 : likesCount + 1);
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   return (
@@ -41,56 +51,62 @@ function Post({ post }) {
         <div className="user">
           <div className="userInfo">
             <Link
-              to={`/profile/${user.userName}`}
+              to={`/profile/${post.userInfos._id}`}
               style={{ textDecoration: "none", color: "inherit" }}
             >
-              <img src={user.profilePic} alt="avatar" />
+              <img src={post.userInfos.profilePic} alt="avatar" />
             </Link>
             <div className="details">
               <Link
-                to={`/profile/${user.userName}`}
+                to={`/profile/${post.userInfos.userName}`}
                 style={{ textDecoration: "none", color: "inherit" }}
               >
-                <span className="name">{user.userName}</span>
+                <span className="name">{post.userInfos.userName}</span>
               </Link>
               <span className="date">{moment(post.createdAt).fromNow()}</span>
             </div>
           </div>
 
-          <MoreHorizIcon />
+          <MorePopper
+            moreOpen={moreOpen}
+            anchorEl={anchorEl}
+            placement={placement}
+          />
+          <Button onClick={handleMoreOpen("bottom-start")} className="more">
+            <MoreHorizIcon />
+          </Button>
         </div>
         <div className="content">
-          {/* Post content */}
           <p>{post.desc}</p>
-          {/* Post Images */}
-          <img src={`${PF}${post.img}`} alt="" />
-          {/* Tags  */}
-          {post.tags &&
-            post.tags.map((tag, i) => (
-              <p className="tags" key={i}>
-                #{tag}
-              </p>
-            ))}
+          {post.img ? <img src={`${PF}${post.img}`} alt="" /> : null}
+          {post.tags ? <p className="tags">#{post.tags}</p> : null}
         </div>
         <div className="info">
-          <div className="item" onClick={handleClick}>
+          <div className="item">
             {liked ? (
-              <FavoriteIcon style={{ color: "red" }} />
+              <FavoriteIcon style={{ color: "red" }} onClick={handleClick} />
             ) : (
-              <FavoriteBorderIcon />
+              <FavoriteBorderIcon onClick={handleClick} />
             )}
-            12 Likes
+            {likesCount} Likes
           </div>
           <div className="item" onClick={() => setCommentOpen(!commentOpen)}>
             <TextsmsOutlinedIcon />
-            12 Comments
+            {commentsCount} Comments
           </div>
           <div className="item">
             <ShareOutlinedIcon />
             Share
           </div>
         </div>
-        {commentOpen && <Comments />}
+        {commentOpen && (
+          <Comments
+            postId={post._id}
+            onCommentSubmitted={() => {
+              setCommentsCount(commentsCount + 1);
+            }}
+          />
+        )}
       </div>
     </div>
   );
