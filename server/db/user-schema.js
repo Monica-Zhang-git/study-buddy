@@ -48,6 +48,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    courses: {
+      type: Array,
+      default: [],
+    },
+    skills: {
+      type: Array,
+      default: [],
+    }
   },
   { timestamps: true }
 );

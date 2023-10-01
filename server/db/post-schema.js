@@ -2,9 +2,10 @@ import mongoose from "mongoose";
 
 const postSchema = new mongoose.Schema(
   {
-    userId: {
+    userInfos: {
       type: String,
       required: true,
+      ref: "User",
     },
     desc: {
       type: String,
@@ -13,13 +14,9 @@ const postSchema = new mongoose.Schema(
     img: {
       type: String,
     },
-    files: {
-      type: Array,
-      default:[]
-    },
     tags: {
-      type: Array,
-      default:[],
+      type: String,
+      default: "",
     },
     likes: {
       type: Array,
