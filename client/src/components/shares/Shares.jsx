@@ -1,79 +1,80 @@
-import React, { useState } from "react";
-import { useContext } from "react";
-import { AuthContext } from "../../context/authContext";
 import "./share.scss";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../context/authContext";
 import { Link } from "react-router-dom";
-import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
-import TagIcon from "@mui/icons-material/Tag";
-import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
+import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
+import TagIcon from "@mui/icons-material/Tag";
+import SimpleDialog from "../tags/Tag";
 
-function Shares(props) {
-  const { currentUser } = useContext(AuthContext);
-  const { register, handleSubmit, setValue } = useForm();
-  const [file, setFile] = useState(null);
+function Shares() {
+  const { currentUser } = useContext(AuthContext); //Get currentUser's infos.
 
-  const queryClient = useQueryClient();
+  const [desc, setDesc] = useState(""); // Initialize the content to an empty string.
+  const [file, setFile] = useState(null); // Initialize the uploaded file to null.
+  const [open, setOpen] = useState(false); // Set the Add Tags feature status to closed by default.
+  const [selectedTags, setSelectedTags] = useState(null); // Initialize selectedTags to null.
 
+  // Function to open the tags dialog.
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  // Function to close the tags dialog and set the selectedTags.
+  const handleClose = (value) => {
+    setOpen(false);
+    setSelectedTags(value);
+  };
+
+  // Function to upload a file using FormData.
   const upload = async (formData) => {
     try {
       const res = await makeRequest.post("/upload", formData);
-      console.log('upload response', res);
       return res.data;
     } catch (err) {
       console.error(err);
     }
   };
-
-  const createPost = async (data) => {
+  // Function to create a new post.
+  const createPost = async () => {
     const formData = new FormData();
     formData.append("file", file);
-
-    // Upload the file if it exists
-    let imgUrl = "";
+    let fileUrl = "";
     if (file) {
-      imgUrl = await upload(formData);
-      console.log('imgUrl', imgUrl);
+      fileUrl = await upload(formData);
     }
-
-    // Create the post
+    // Create a new post with description, tags, and file.
     const newPost = {
-      userId: currentUser._id,
-      desc: data.desc,
-      img: imgUrl,
-    };
-    console.log('newPost',newPost);
+      desc: desc,
+      tags: selectedTags,
+      img: fileUrl,
+    }; //Create a newPost based the content, tags, file
     const response = await makeRequest.post("/post", newPost);
-    console.log('post success', response.data);
     return response.data;
   };
 
-  const mutation = useMutation({
-    mutationFn: createPost,
-    onSuccess: () => {
-      // Invalidate and refetch posts query
-      queryClient.invalidateQueries(["posts"]);
-      // Reset the form and file input
-      setValue("desc", "");
+  const queryClient = useQueryClient();
+
+  // UseMutation for creating a post with success callback to invalidate queries and reset state.
+  const mutation = useMutation(createPost, {
+    onSuccess: async () => {
+      queryClient.invalidateQueries(["Posts"]);
+      setDesc("");
       setFile(null);
+      setSelectedTags("");
     },
   });
 
-  const handleFileUpload = (e) => {
-    setFile(e.target.files[0]);
-  };
-
-  const onSubmit = (data) => {
-    mutation.mutate(data);
+  // Function to handle the post creation process.
+  const handlePost = async () => {
+    mutation.mutate();
   };
 
   return (
     <div className="share">
       <div className="container">
-        {/* UserInfo */}
         <Link
-          to={`/profile/${currentUser.userName}`}
+          to={`/profile/${currentUser._id}`}
           style={{ textDecoration: "none", color: "inherit" }}
         >
           <div className="userInfo">
@@ -81,46 +82,51 @@ function Shares(props) {
             <span className="name">{currentUser.userName}</span>
           </div>
         </Link>
-        {/* Post content and file, add tags*/}
-        <form onSubmit={handleSubmit(onSubmit)}>
-          {/* Add content */}
-          <div className="content">
-            <input
-              {...register("desc")}
-              type="text"
-              placeholder={`What's on your mind, undefined?`}
-            />
-          </div>
-          <hr />
-          <div className="attachment">
-            {/* Add study attachments */}
-            <div className="left">
-              <div className="item">
-                <input
-                  type="file"
-                  id="file"
-                  onChange={handleFileUpload}
-                  // multiple
-                />
-                <label htmlFor="file">
-                  <InsertPhotoIcon />
-                  <span htmlFor="file">Add File</span>
-                </label>
-              </div>
-              {/* Add Course Tags or Skills Tags */}
-              <div className="item">
-                <input type="file" id="file" />
-                <label htmlFor="file">
+        <div className="content">
+          <input
+            type="text"
+            value={desc}
+            placeholder={`What's on your mind, undefined?`}
+            onChange={(e) => setDesc(e.target.value)}
+          />
+          {selectedTags ? (
+            <span className="selectedTag">#{selectedTags}</span>
+          ) : null}
+        </div>
+        <hr />
+        <div className="attachment">
+          <div className="left">
+            <div className="item">
+              <div className="tag">
+                <br />
+                <input type="button" id="tags" onClick={handleClickOpen} />
+                <label htmlFor="tags">
                   <TagIcon />
-                  <span htmlFor="file">Add Tags</span>
+                  <span htmlFor="tags">Add Tags</span>
                 </label>
+                <SimpleDialog
+                  selectedTags={selectedTags}
+                  open={open}
+                  onClose={handleClose}
+                />
               </div>
             </div>
-            <div className="right">
-              <button type="submit">Post</button>
+            <div className="item">
+              <input
+                type="file"
+                id="file"
+                onChange={(e) => setFile(e.target.files[0])}
+              />
+              <label htmlFor="file">
+                <InsertPhotoIcon />
+                <span htmlFor="file">Add File</span>
+              </label>
             </div>
           </div>
-        </form>
+          <div className="right">
+            <button onClick={handlePost}>Post</button>
+          </div>
+        </div>
       </div>
     </div>
   );

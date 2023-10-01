@@ -42,6 +42,13 @@
             }
           }
         }
+        .more {
+          cursor: pointer;
+          color: themed("textColor");
+        }
+        .dialog{
+          display: inline;
+        }
       }
 
       .content {

@@ -29,19 +29,26 @@
       }
 
       .content {
+        display: flex;
+        flex-direction: column;
+        padding: 20px 10px;
+        
         input {
           width: 60%;
           height: 100%;
           border: none;
           outline: none;
-          padding: 20px 10px;
           background-color: transparent;
           color: themed("textColor");
         }
       }
+      .selectedTag {
+        font-size: 12px;
+        margin-top: 4px;
+      }
 
       hr {
-        margin: 20px 0;
+        margin: 5px 0;
         height: 0.5px;
         background-color: themed("border");
         border: none;
@@ -53,7 +60,8 @@
 
         .left {
           display: flex;
-          align-items: center;
+          // align-items: center;
+          align-items: flex-end;
           gap: 20px;
           .item {
             padding: 5px;

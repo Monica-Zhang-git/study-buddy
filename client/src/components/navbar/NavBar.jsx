@@ -1,4 +1,5 @@
 import "./navbar.scss";
+import * as React from "react";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
@@ -8,9 +9,10 @@ import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { Link } from "react-router-dom";
+import photo from "../../assets/register-background-pic.jpg";
 import { useContext } from "react";
-import { DarkModeContext } from "../../context/darkModeContext";
 import { AuthContext } from "../../context/authContext";
+import { DarkModeContext } from "../../context/darkModeContext";
 
 function NavBar(props) {
   const { toggle, darkMode } = useContext(DarkModeContext);
@@ -24,8 +26,9 @@ function NavBar(props) {
           <span>Study Buddy</span>
         </Link>
         <Link to="/" style={{ textDecoration: "none" }}>
-          <HomeOutlinedIcon />
+          <HomeOutlinedIcon className="homebutton" />
         </Link>
+
         {darkMode ? (
           <DarkModeOutlinedIcon
             onClick={toggle}
@@ -46,8 +49,8 @@ function NavBar(props) {
         <MessageOutlinedIcon />
         <NotificationsOutlinedIcon />
         <div className="user">
-          <img src={currentUser.profilePic} alt="avatar" />
-          <span>{currentUser.name}</span>
+          <img src={currentUser.profilePic} />
+          <span>{currentUser.userName}</span>
         </div>
       </div>
     </div>
