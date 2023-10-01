@@ -13,7 +13,6 @@ router.get("/users/:id", async (req, res) => {
     const { password, updatedAt, createdAt, ...profile } = user._doc;
     //   Get the users' posts
     const posts = await Post.find({userId: user._id});
-    // console.log('user info & posts', profile, posts);
 
     res.status(200).json(profile);
   } catch (error) {

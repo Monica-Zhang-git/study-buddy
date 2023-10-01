@@ -1,4 +1,5 @@
 import express from "express";
+import jwt from "jsonwebtoken";
 import { Post } from "../db/post-schema.js";
 import { User } from "../db/user-schema.js";
 
@@ -6,17 +7,37 @@ const router = express.Router();
 
 // CREATE A POST
 router.post("/", async (req, res) => {
-  const newPost = new Post(req.body);
+  const token = req.cookies.accessToken;
+  if (!token) return res.status(401).json("Not logged in!");
+  jwt.verify(token, "secretkey", (err) => {
+    if (err) return res.status(403).json("Token is not valid!");
+  });
+
+  const userInfo = await verifyToken(token);
+
+  const newPost = new Post({
+    userInfos: userInfo.userId,
+    desc: req.body.desc,
+    img: req.body.img,
+    tags: req.body.tags,
+  });
+
   try {
     const Post = await newPost.save();
     res.status(200).json(Post);
   } catch (error) {
-    return res.status(500).json(error);
+    res.status(500).json(error);
   }
 });
 
 // DELETE A POST
 router.delete("/:id", async (req, res) => {
+  const token = req.cookies.accessToken;
+  if (!token) return res.status(401).json("Not logged in!");
+  jwt.verify(token, "secretkey", (err) => {
+    if (err) return res.status(403).json("Token is not valid!");
+  });
+
   try {
     const post = await Post.findById(req.params.id);
     if (post.userId === req.body.userId) {
@@ -32,6 +53,12 @@ router.delete("/:id", async (req, res) => {
 
 // UPDATE A POST
 router.put("/:id", async (req, res) => {
+  const token = req.cookies.accessToken;
+  if (!token) return res.status(401).json("Not logged in!");
+  jwt.verify(token, "secretkey", (err) => {
+    if (err) return res.status(403).json("Token is not valid!");
+  });
+
   try {
     const post = await Post.findById(req.params.id);
     if (post.userId === req.body.userId) {
@@ -45,34 +72,78 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// GET PROFILE POST OR COMMUNITY POST BASED ON IF USERNAME EXISTED
-router.get("/:identifier", async (req, res) => {
-  try {
-    const identifier = req.params.identifier;
-    console.log("identifier", identifier);
+// GET POSTS BY USERID
+router.get("/", async (req, res) => {
+  const token = req.cookies.accessToken;
+  if (!token) return res.status(401).json("Not logged in!");
 
+  const userInfo = await verifyToken(token);
+  const currentUserId = userInfo.userId;
+
+  const profileUserId = req.query.userId;
+
+  try {
     let posts;
-    // GET COMMUNITY POST
-    if (identifier.length === 24) {
-      const currentUser = await User.findById(identifier);
+
+    // If profileUserId is exist, get profile posts
+    if (profileUserId !== "undefined") {
+      posts = await Post.find({ userInfos: profileUserId }).populate({
+        path: "userInfos",
+        select: "userName profilePic",
+      });
+    }
+    // Otherwise, to get community posts
+    else {
+      const currentUser = await User.findById(currentUserId);
       const followingIds = currentUser.followings;
       posts = await Post.find({
-        userId: { $in: [currentUser._id, ...followingIds] },
-      }).sort({ createdAt: -1 });
-    }
-    // GET PROFILE POST
-    else {
-      const user = await User.findOne({ userName: identifier });
-      posts = await Post.find({ userId: user._id });
-    }
-
-    if (!posts) {
-      return res.status(404).json({ message: "Posts not found" });
+        userInfos: { $in: [currentUser._id, ...followingIds] },
+      })
+        .populate({
+          path: "userInfos",
+          select: "userName profilePic",
+        })
+        .sort({ createdAt: -1 });
     }
 
-    res.status(200).json(posts); 
+    res.status(200).json(posts);
   } catch (error) {
     res.status(500).json(error);
+  }
+});
+
+async function verifyToken(token) {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, "secretkey", (err, userInfo) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(userInfo);
+      }
+    });
+  });
+}
+
+// Like or Dislike a Post
+router.put("/:id/like", async (req, res) => {
+  const token = req.cookies.accessToken;
+  if (!token) return res.status(401).json("Not logged in!");
+
+  const userInfo = await verifyToken(token);
+  const currentUserId = userInfo.userId;
+
+  const post = await Post.findById(req.params.id);
+
+  try {
+    if (!post.likes.includes(currentUserId)) {
+      await post.updateOne({ $push: { likes: currentUserId } });
+      res.status(200).json("The post has been liked");
+    } else {
+      await post.updateOne({ $pull: { likes: currentUserId } });
+      res.status(200).json("The post has been disliked");
+    }
+  } catch (error) {
+    return res.status(500).json(error);
   }
 });
 
