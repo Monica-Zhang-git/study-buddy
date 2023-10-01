@@ -1,0 +1,13 @@
+@import "../../style.scss";
+
+.popper {
+  .container {
+    padding: 20px;
+    flex-direction: column;
+    display: flex;
+    gap: 10px;
+    .item {
+      color: #8095ff;
+    }
+  }
+}
